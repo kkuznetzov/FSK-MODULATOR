@@ -8,10 +8,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # Имя входного wav файла
-wav_file_in_name = 'bfsk_out.wav'
+#wav_file_in_name = 'qfsk_out.wav'
+wav_file_in_name = 'qfsk_out_and_noise_and_low_freq2.wav'
 
 # Имя выходного wav файла
-wav_file_out_name = 'bfsk_out_and_noise.wav'
+wav_file_out_name = 'qfsk_out_and_noise.wav'
 
 # Требуемое соотношение сигнал/шум
 traget_signal_noise_ration_db = 50

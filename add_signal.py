@@ -8,14 +8,15 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # Частота и амплитуда добавляемого сигнала
-signal_frequency = 8800
+signal_frequency = 450
 signal_amplitude = 1
 
 # Имя входного wav файла
-wav_file_in_name = 'bfsk_out_and_noise.wav'
+#wav_file_in_name = 'qfsk_out_and_noise.wav'
+wav_file_in_name = 'qfsk_out_and_noise_and_low_freq1.wav'
 
 # Имя выходного wav файла
-wav_file_out_name = 'bfsk_out_and_noise_and_low_freq.wav'
+wav_file_out_name = 'qfsk_out_and_noise_and_low_freq.wav'
 
 # Читаем входной файл
 input_signal_samplerate, input_signal_data = wavfile.read(wav_file_in_name)
