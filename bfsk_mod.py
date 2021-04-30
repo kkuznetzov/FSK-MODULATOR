@@ -85,21 +85,21 @@ for i in range(int(signal_sample_length)):
     
     # Используем одну из двух частот в зависимости от значения бита
     if bit_value > 0: # Не ноль
-        output_signal[i] = cos_signal_freq_0[phase_cnt]
+        output_signal[i] = cos_signal_freq_1[phase_cnt]
         
         # Счётчик фазы косинуса
         # Здесь же счётчик бит
         phase_cnt += 1
-        if(phase_cnt >= sample_cnt_freq_0):
+        if(phase_cnt >= sample_cnt_freq_1):
             phase_cnt = 0
             bit_cnt += 1        
     else:             # Ноль
-        output_signal[i] = cos_signal_freq_1[phase_cnt]
+        output_signal[i] = cos_signal_freq_0[phase_cnt]
 
         # Счётчик фазы косинуса
         # Здесь же счётчик бит
         phase_cnt += 1
-        if(phase_cnt >= sample_cnt_freq_1):
+        if(phase_cnt >= sample_cnt_freq_0):
             phase_cnt = 0
             bit_cnt += 1      
             
