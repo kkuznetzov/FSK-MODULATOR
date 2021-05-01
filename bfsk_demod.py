@@ -19,7 +19,7 @@ import numpy as np
 start_phase = 0
 
 # Имя входного wav файла
-wav_file_in_name = 'bfsk_out_and_noise_and_low_freq.wav'
+wav_file_in_name = 'bfsk_out.wav'
 
 # Имя выходного файла с данными
 data_file_out_name = 'data_rcv.txt'
