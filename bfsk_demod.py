@@ -36,12 +36,6 @@ frequency_0_period_per_bit = 20
 frequency_1_value = 3000
 frequency_1_period_per_bit = 15
 
-# Длина преамбулы бит
-preambula_size = 220
-
-# Длина стартового символа бит
-start_symbol_size = 5
-
 # Число отсчётов дискретизации для частоты 0 и частоты 1
 sample_cnt_freq_0 = (input_signal_samplerate * frequency_0_period_per_bit) / frequency_0_value
 sample_cnt_freq_1 = (input_signal_samplerate * frequency_1_period_per_bit) / frequency_1_value
@@ -66,8 +60,6 @@ print("Число отсчётов дикретизации для бита 1 ="
 print("Длительность входных данных секунд =", input_signal_length/input_signal_samplerate)
 print("Длина посылки бит для частоты 0 =", signal_length_freq_0)
 print("Длина посылки бит для частоты 1 =", signal_length_freq_1)
-print("Длина преамбулы бит =", preambula_size)
-print("Длина стартового символа бит =", start_symbol_size)
 
 # Формируем отсчёты косинуса двух частот
 cos_samples_freq_0 = np.arange(sample_cnt_freq_0)
@@ -85,92 +77,6 @@ for i in range(int(input_signal_length)):
     if abs(input_signal_data[i]) > scale_value:
        scale_value = abs(input_signal_data[i])
 input_signal_data = input_signal_data/scale_value
-
-# Обнаружение сигнала и его фазы
-# Перемножаем входной сигнал на опорные сигналы
-# Интегрируем и сравниваем с предыдущим значением
-# Цель получить максимальное значение интегрирования
-integration_result_current_0 = 0  # Текущий результат интегрирования
-integration_result_current_1 = 0  # Текущий результат интегрирования
-multiplication_result_0 = 0       # Результат перемножение входа на опорную частоту
-multiplication_result_1 = 0       # Результат перемножение входа на опорную частоту
-preambula_phase_0 = 50             # Фаза опорного  сигнала
-preambula_phase_1 = 51             # Фаза опорного  сигнала
-preambula_phase_counter = 0     # Счётчик периодов интегрирования, что бы по его истечению сравнивать результат интегрирования с предыдущим
-preambula_integrator_0 = np.linspace(0, 0, int(preambula_size))
-preambula_integrator_1 = np.linspace(0, 0, int(preambula_size))
-integrator_counter = 0
-phase_diff = 0
-for i in range(int(sample_cnt_freq_0 * preambula_size)):
-#for i in range(int(input_signal_length)):
-    multiplication_result_0 = cos_signal_freq_0[preambula_phase_0] * input_signal_data[i] # Перемножаем вход на опорный сигнал
-    integration_result_current_0 += multiplication_result_0 # Интегрируем - суммируем
-    multiplication_result_1 = cos_signal_freq_0[preambula_phase_1] * input_signal_data[i] # Перемножаем вход на опорный сигнал
-    integration_result_current_1 += multiplication_result_1 # Интегрируем - суммируем
-
-    # Счётчик фазы
-    preambula_phase_0 += 1
-    if preambula_phase_0 >= sample_cnt_freq_0:
-        preambula_phase_0 = 0
-    preambula_phase_1 += 1
-    if preambula_phase_1 >= sample_cnt_freq_0:
-        preambula_phase_1 = 0
-
-    # Счётчик периодов интегрирования
-    preambula_phase_counter += 1
-    if preambula_phase_counter >= sample_cnt_freq_0:
-        phase_diff = phase_diff/5 + integration_result_current_1 - integration_result_current_0
-        preambula_phase_0 += round(phase_diff/5)
-        preambula_phase_1 = preambula_phase_0 + 1
-        if preambula_phase_0 >= sample_cnt_freq_0:
-            preambula_phase_0 = preambula_phase_0 - round(sample_cnt_freq_0)
-        if preambula_phase_1 >= sample_cnt_freq_0:
-            preambula_phase_1 = preambula_phase_1 - round(sample_cnt_freq_0)
-        print("1 ", preambula_phase_counter, preambula_phase_0, integration_result_current_0)
-        print("2 ", preambula_phase_counter, preambula_phase_1, integration_result_current_1)
-        
-        '''
-        if integration_result_current_1 >= integration_result_current_0:
-            
-            preambula_phase_0 += round(phase_diff/5)
-            #preambula_phase_1 += 1 + round(phase_diff)
-            preambula_phase_1 = preambula_phase_0 + 1
-            if preambula_phase_0 >= sample_cnt_freq_0:
-                preambula_phase_0 = preambula_phase_0 - round(sample_cnt_freq_0)
-            if preambula_phase_1 >= sample_cnt_freq_0:
-                preambula_phase_1 = preambula_phase_1 - round(sample_cnt_freq_0)
-            print("1+ ", preambula_phase_counter, preambula_phase_0, integration_result_current_0)
-            print("2+ ", preambula_phase_counter, preambula_phase_1, integration_result_current_1)
-        if integration_result_current_1 < integration_result_current_0:
-            phase_diff = phase_diff/10 + integration_result_current_0 - integration_result_current_1
-            preambula_phase_0 -= round(phase_diff/5)
-            #preambula_phase_1 -= 1 + round(phase_diff)
-            preambula_phase_1 = preambula_phase_0 + 1
-            if preambula_phase_0 < 0:
-                preambula_phase_0 = round(sample_cnt_freq_0) + preambula_phase_0
-            if preambula_phase_1 < 0:
-                preambula_phase_1 = round(sample_cnt_freq_0) + preambula_phase_1
-            print("1- ", preambula_phase_counter, preambula_phase_0, integration_result_current_0)
-            print("2- ", preambula_phase_counter, preambula_phase_1, integration_result_current_1)
-'''            
-        preambula_phase_counter = 0
-        preambula_integrator_0[integrator_counter] = integration_result_current_0
-        preambula_integrator_1[integrator_counter] = integration_result_current_1
-        integrator_counter += 1  
-        
-        integration_result_current_0 = 0
-        integration_result_current_1 = 0
-        
-print(integration_result_current_0)
-print(integration_result_current_1)
-
-t = np.linspace(1, int(preambula_size), int(preambula_size))
-plt.subplot(3,1,1)
-plt.plot(t, preambula_integrator_0, preambula_integrator_1)
-plt.title('PD signal')
-plt.ylabel('Voltage (V)')
-plt.xlabel('Time (s)')
-plt.show()
 
 # Перемножаем входной сигнал на опорные сигналы
 phase_cnt_freq_0 = start_phase # Счётчик фазы косинуса частоты 0
