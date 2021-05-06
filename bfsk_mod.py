@@ -25,11 +25,11 @@ wav_file_name = 'bfsk_out.wav'
 samplerate = 44100
 
 # Частота 0, параметры. Значение частоты и число периодов на бит
-frequency_0_value = 4000
+frequency_0_value = 2000
 frequency_0_period_per_bit = 20
 
 # Частота 1, параметры. Значение частоты и число периодов на бит
-frequency_1_value = 3000
+frequency_1_value = 1500
 frequency_1_period_per_bit = 15
 
 # Число отсчётов дискретизации для частоты 0 и частоты 1

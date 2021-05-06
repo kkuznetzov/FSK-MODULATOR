@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # Частота и амплитуда добавляемого сигнала
-signal_frequency = 450
+signal_frequency = 500
 signal_amplitude = 1
 
 # Имя входного wav файла

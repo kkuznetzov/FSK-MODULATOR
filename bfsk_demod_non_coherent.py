@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # Начальная фаза приёма
-start_phase = 179
+start_phase = 0
 
 # Имя входного wav файла
 wav_file_in_name = 'bfsk_out_and_noise_and_low_freq.wav'
@@ -29,11 +29,11 @@ input_signal_samplerate, input_signal_data = wavfile.read(wav_file_in_name)
 input_signal_length = input_signal_data.shape[0]
 
 # Частота 0, параметры. Значение частоты и число периодов на бит
-frequency_0_value = 4000
+frequency_0_value = 2000
 frequency_0_period_per_bit = 20
 
 # Частота 1, параметры. Значение частоты и число периодов на бит
-frequency_1_value = 3000
+frequency_1_value = 1500
 frequency_1_period_per_bit = 15
 
 # Число отсчётов дискретизации для частоты 0 и частоты 1
@@ -120,6 +120,10 @@ output_integrator_freq_1_q = np.linspace(0, 0, int(signal_length_freq_1))
 output_integrator_freq_0_sum_squares = np.linspace(0, 0, int(signal_length_freq_0))
 output_integrator_freq_1_sum_squares = np.linspace(0, 0, int(signal_length_freq_1))
 
+# Фазы сигналов
+output_integrator_freq_0_phase = np.linspace(0, 0, int(signal_length_freq_0))
+output_integrator_freq_1_phase = np.linspace(0, 0, int(signal_length_freq_1))
+
 # Интегрируем отсчёты
 mean_value_freq_0_i = 0
 mean_value_freq_0_q = 0
@@ -131,10 +135,10 @@ output_cnt_freq_0 = 0
 output_cnt_freq_1 = 0
 for i in range(int(input_signal_length)):
     # Интегрируем
-    mean_value_freq_0_i += multiplication_result_freq_0_I[i]# * sample_time_freq_0
-    mean_value_freq_0_q += multiplication_result_freq_0_Q[i]# * sample_time_freq_0    
-    mean_value_freq_1_i += multiplication_result_freq_1_I[i]# * sample_time_freq_1
-    mean_value_freq_1_q += multiplication_result_freq_1_Q[i]# * sample_time_freq_1
+    mean_value_freq_0_i += multiplication_result_freq_0_I[i] * sample_time_freq_0
+    mean_value_freq_0_q += multiplication_result_freq_0_Q[i] * sample_time_freq_0    
+    mean_value_freq_1_i += multiplication_result_freq_1_I[i] * sample_time_freq_1
+    mean_value_freq_1_q += multiplication_result_freq_1_Q[i] * sample_time_freq_1
 
     # Счётчики отсчётов для периода интегрирования
     integrator_cnt_freq_0 += 1
@@ -142,11 +146,14 @@ for i in range(int(input_signal_length)):
         integrator_cnt_freq_0 = 0
         
         # Результат интегрирования
-        output_integrator_freq_0_i[output_cnt_freq_0] = mean_value_freq_0_i #/ sample_cnt_freq_0
-        output_integrator_freq_0_q[output_cnt_freq_0] = mean_value_freq_0_q #/ sample_cnt_freq_0
+        output_integrator_freq_0_i[output_cnt_freq_0] = mean_value_freq_0_i / sample_cnt_freq_0
+        output_integrator_freq_0_q[output_cnt_freq_0] = mean_value_freq_0_q / sample_cnt_freq_0
         
         # Сумма квадратов синфазной и квадратурной составляющих
         output_integrator_freq_0_sum_squares[output_cnt_freq_0] = output_integrator_freq_0_i[output_cnt_freq_0] ** 2 + output_integrator_freq_0_q[output_cnt_freq_0] ** 2
+        
+        # Фаза сигнала
+        output_integrator_freq_0_phase[output_cnt_freq_0] = math.atan(output_integrator_freq_0_q[output_cnt_freq_0] / output_integrator_freq_0_i[output_cnt_freq_0])
         
         mean_value_freq_0_i = 0
         mean_value_freq_0_q = 0
@@ -156,11 +163,14 @@ for i in range(int(input_signal_length)):
         integrator_cnt_freq_1 = 0
         
         # Результат интегрирования
-        output_integrator_freq_1_i[output_cnt_freq_1] = mean_value_freq_1_i #/ sample_cnt_freq_1
-        output_integrator_freq_1_q[output_cnt_freq_1] = mean_value_freq_1_q #/ sample_cnt_freq_1
+        output_integrator_freq_1_i[output_cnt_freq_1] = mean_value_freq_1_i / sample_cnt_freq_1
+        output_integrator_freq_1_q[output_cnt_freq_1] = mean_value_freq_1_q / sample_cnt_freq_1
         
         # Сумма квадратов синфазной и квадратурной составляющих
         output_integrator_freq_1_sum_squares[output_cnt_freq_1] = output_integrator_freq_1_i[output_cnt_freq_1] ** 2 + output_integrator_freq_1_q[output_cnt_freq_1] ** 2
+        
+        # Фаза сигнала
+        output_integrator_freq_1_phase[output_cnt_freq_1] = math.atan(output_integrator_freq_1_q[output_cnt_freq_1] / output_integrator_freq_1_i[output_cnt_freq_1])
         
         mean_value_freq_1_i = 0
         mean_value_freq_1_q = 0

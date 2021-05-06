@@ -15,7 +15,7 @@ wav_file_in_name = 'bfsk_out.wav'
 wav_file_out_name = 'bfsk_out_and_noise.wav'
 
 # Требуемое соотношение сигнал/шум
-traget_signal_noise_ration_db = 50
+traget_signal_noise_ration_db = 40
 
 # Читаем входной файл
 input_signal_samplerate, input_signal_data = wavfile.read(wav_file_in_name)
