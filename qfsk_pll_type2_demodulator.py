@@ -636,7 +636,7 @@ for i in range(int(input_signal_length)):
 # Для отладки
 plt.plot(pll_type_2_symbol_0_filter_output_debug, "-r", pll_type_2_symbol_1_filter_output_debug, "-g", pll_type_2_symbol_2_filter_output_debug, "-b", pll_type_2_symbol_3_filter_output_debug, "-y")
 plt.title('Receive QFSK, rate (приём QFSK сигнала со скоростью) {0} бит/сек'.format(transmit_bit_rate))
-plt.xlabel('Ыфьзду Номер отсчёта', color='gray')
+plt.xlabel('Sample Номер отсчёта', color='gray')
 plt.ylabel('Filter output Выход фильтра для значения захвата сигнала', color='gray')
 plt.legend(['Symbol (символ) 00, frequency (частота) {0} Hz (Гц)'.format(symbol_0_frequency), 'Symbol (символ) 01, frequency (частота) {0} Hz (Гц)'.format(symbol_1_frequency), 'Symbol (символ) 10, frequency (частота) {0} Hz (Гц)'.format(symbol_2_frequency), 'Symbol (символ)  11, frequency (частота) {0} Hz (Гц)'.format(symbol_3_frequency)], loc = 2)
 
