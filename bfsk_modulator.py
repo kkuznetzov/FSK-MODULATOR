@@ -177,7 +177,6 @@ for i in range(int(output_signal_sample_count)):
             else:
                 bit_value = 1
 
-
             # Счётчики бит и байт
             input_bit_count += 1
             if input_bit_count == 8:

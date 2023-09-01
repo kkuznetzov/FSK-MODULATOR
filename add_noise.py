@@ -29,7 +29,7 @@ wav_file_out_name = os.path.join(os.path.dirname(__file__), wav_file_out_name)
 
 # Required signal-to-noise ratio
 # Требуемое соотношение сигнал/шум
-traget_signal_noise_ration_db = 45
+target_signal_noise_ration_db = 45
 
 # Reading input wav file
 # Читаем входной файл
@@ -58,7 +58,7 @@ print("Средняя мощность сигнала, дБ =", input_signal_dat
 
 # Noise energy
 # Значение шума
-noise_avg_db = input_signal_data_avg_watts_db - traget_signal_noise_ration_db
+noise_avg_db = input_signal_data_avg_watts_db - target_signal_noise_ration_db
 noise_avg_watts = 10 ** (noise_avg_db / 10)
 
 # Output of noise parameters
